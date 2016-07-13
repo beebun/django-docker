@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     git \
     nginx \
     python-dev \
+    libpq-dev \
     python-setuptools \
     python-urllib3 \
     supervisor \
