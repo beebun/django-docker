@@ -3,23 +3,23 @@
 # supervisord) every time the Docker image is run.
 
 # If we're not in production, create a temporary dev database
-if [ "$DJANGO_PRODUCTION" != "true" ]; then
-    echo "DJANGO_PRODUCTION=false; creating local database..."
-    # Wait until the MySQL daemon is running
-    while [ "$(pgrep mysql | wc -l)" -eq 0 ] ; do
-        echo "MySQL daemon not running; waiting one second..."
-        sleep 1
-    done
-    # Wait until we can successfully connect to the MySQL daemon
-    until mysql -uroot -pdevrootpass -e ";" ; do
-        echo "Can't connect to MySQL; waiting one second..."
-        sleep 1
-    done
-    echo "MySQL daemon is running; creating database..."
-    mysql -uroot -e "CREATE DATABASE devdb; CREATE USER devuser@localhost; SET PASSWORD FOR devuser@localhost=PASSWORD('devpass'); GRANT ALL PRIVILEGES ON devdb.* TO devuser@localhost IDENTIFIED BY 'devpass'; FLUSH PRIVILEGES;" -pdevrootpass;
-else
-    echo "DJANGO_PRODUCTION=true; no local database created"        
-fi
+# if [ "$DJANGO_PRODUCTION" != "true" ]; then
+#     echo "DJANGO_PRODUCTION=false; creating local database..."
+#     # Wait until the MySQL daemon is running
+#     while [ "$(pgrep mysql | wc -l)" -eq 0 ] ; do
+#         echo "MySQL daemon not running; waiting one second..."
+#         sleep 1
+#     done
+#     # Wait until we can successfully connect to the MySQL daemon
+#     until mysql -uroot -pdevrootpass -e ";" ; do
+#         echo "Can't connect to MySQL; waiting one second..."
+#         sleep 1
+#     done
+#     echo "MySQL daemon is running; creating database..."
+#     mysql -uroot -e "CREATE DATABASE devdb; CREATE USER devuser@localhost; SET PASSWORD FOR devuser@localhost=PASSWORD('devpass'); GRANT ALL PRIVILEGES ON devdb.* TO devuser@localhost IDENTIFIED BY 'devpass'; FLUSH PRIVILEGES;" -pdevrootpass;
+# else
+#     echo "DJANGO_PRODUCTION=true; no local database created"        
+# fi
 
 # Initialize Django project
 python /code/django_docker/manage.py collectstatic --noinput
